@@ -1,0 +1,392 @@
+/* LotteryGame.css */
+.lottery-game {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #000931 0%, #764ba2 100%);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    color: white;
+    min-height: 600px;
+}
+
+.cred-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    margin-top:4px;
+}
+
+/* Current Prize Section */
+.current-prize {
+    text-align: center;
+    flex: 1;
+}
+
+.prize-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.prize-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*border: 1px solid rgb(255, 153, 0);*/
+    border-radius: 12px;
+    /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);*/
+    justify-content: center;
+}
+
+.prize-image {
+    width: auto;
+    height: 100px;
+    object-fit: contain;
+    background: rgba(192, 192, 192, 0);
+    /*padding: 5px;*/
+    transition: transform 0.3s ease;
+    /*border-radius: 5%;*/
+    /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);*/
+    /*border: 3px solid rgba(255, 153, 0, 0.05);*/
+    animation: bounce 2s infinite ease-in-out;
+}
+
+/* Bounce animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    25% {
+        transform: scale(1.1) translateY(-5px);
+    }
+    50% {
+        transform: scale(1.05) translateY(-2px);
+    }
+    75% {
+        transform: scale(1.1) translateY(-5px);
+    }
+}
+
+/* Alternative pop animation (choose one) */
+@keyframes pop {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 0 rgba(191, 0, 255, 0);
+        border-color: rgba(255, 153, 0, 0.05);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 20px 5px rgba(191, 0, 255, 0);
+        border-color: rgba(191, 0, 255, 0);
+    }
+}
+
+/* Combined bounce and glow animation */
+@keyframes bounce-glow {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 0 rgba(191, 0, 255, 0);
+        border-color: rgba(255, 153, 0, 0);
+    }
+    25% {
+        transform: scale(1.1) translateY(-8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px 3px rgba(191, 0, 255, 0);
+        border-color: rgba(191, 0, 255, 0);
+    }
+    50% {
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.35),
+        0 0 10px 2px rgba(255, 215, 0, 0);
+        border-color: rgba(255, 215, 0, 0);
+    }
+    75% {
+        transform: scale(1.1) translateY(-8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px 3px rgba(255, 215, 0, 0);
+        border-color: rgba(255, 215, 0, 0);
+    }
+}
+
+/* Choose which animation to use by adding the class */
+.prize-image.bounce {
+    animation: bounce 2s infinite ease-in-out;
+}
+
+.prize-image.pop {
+    animation: pop 1.5s infinite ease-in-out;
+}
+
+.prize-image.pulse-glow {
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.prize-image.bounce-glow {
+    animation: bounce-glow 2.5s infinite ease-in-out;
+}
+
+/* Hover effects */
+.prize-image:hover {
+    animation-duration: 0.5s; /* Speed up on hover */
+}
+
+/* For a more dramatic effect */
+.prize-image.dramatic {
+    animation: bounce-glow 2s infinite ease-in-out;
+    /*filter: brightness(1.1) saturate(1.2);*/
+}
+
+.prize-value {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffd700;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 10px;
+}
+
+/* Prize Display */
+.prize-display {
+    background: rgba(255, 255, 255, 0);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.prize-display .time-left {
+    font-size: 14px;
+    color: #00c6ff;
+    font-weight: bold;
+}
+
+/* Draw Info */
+.draw-info {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+/* Canvas Section */
+.canvas-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.canvas-section h3 {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #ffd700;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    -webkit-tap-highlight-color: transparent;
+    /*padding: 10px;*/
+}
+
+.main-canvas {
+    border-radius: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+}
+
+.main-canvas:hover {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.06);
+}
+.main-canvas:focus {
+    outline: none;
+}
+
+canvas{
+    max-height: 500px;
+    width: 100%;
+    max-width: 700px;
+}
+
+/* Quick Select Buttons */
+.quick-select-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.quick-select-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.quick-select-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.quick-select-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Message Display */
+.message-display {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+    backdrop-filter: blur(10px);
+    color: #ffd700;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.buy-ticket-btn, .reset-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buy-ticket-btn {
+    background: linear-gradient(145deg, #ffd700, #ff6b00);
+    color: #333;
+}
+
+.buy-ticket-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+}
+
+.buy-ticket-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.reset-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.reset-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Credits Section */
+.credits-container-main{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap:10px
+}
+.credits-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+}
+
+.credits-label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.credits-amount {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffce00;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .lottery-game {
+        padding: 15px;
+        margin: 10px;
+        max-width: 100%;
+    }
+
+    .cred-title {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .prize-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .canvas-container {
+        /*padding: 5px;*/
+    }
+
+    .main-canvas {
+        /*width: 280px;*/
+        /*height: 327px;*/
+    }
+}
