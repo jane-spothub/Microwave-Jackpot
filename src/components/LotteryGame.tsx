@@ -10,7 +10,7 @@ interface LotteryNumber {
 const LotteryGame: React.FC = () => {
     // Generate 20 numbers
     const [numbers, setNumbers] = useState<LotteryNumber[]>(() =>
-        Array.from({ length: 20 }, (_, i) => ({
+        Array.from({length: 20}, (_, i) => ({
             value: i + 1,
             selected: false
         }))
@@ -50,6 +50,26 @@ const LotteryGame: React.FC = () => {
 
         return nextDraw;
     }
+
+    // Function for time-based encouragement
+    const getEncouragingMessage = () => {
+        const now = new Date();
+        const nextDrawTime = new Date(nextDraw);
+        const timeDiff = nextDrawTime.getTime() - now.getTime();
+        const hoursUntilDraw = Math.floor(timeDiff / (1000 * 60 * 60));
+
+        if (hoursUntilDraw > 12) {
+            return "Ticket confirmed!";
+        } else if (hoursUntilDraw > 6) {
+            return "You're entered! The draw is getting closer!";
+        } else if (hoursUntilDraw > 3) {
+            return "Almost there! Your microwave awaits!";
+        } else if (hoursUntilDraw > 1) {
+            return "Just a little longer! Good luck!";
+        } else {
+            return "Get ready! The draw is happening soon!";
+        }
+    };
 
     // Update countdown timer
     useEffect(() => {
@@ -267,10 +287,10 @@ const LotteryGame: React.FC = () => {
 
         // Draw selected balls in a row with equal spacing
         const totalWidth = selectedNumbers.length * spacing;
-        const startX = (1000 - totalWidth) / 2 + spacing / 2+25;
+        const startX = (1000 - totalWidth) / 2 + spacing / 2 + 25;
 
         selectedNumbers.forEach((num, index) => {
-            const centerX = startX + index * spacing-25;
+            const centerX = startX + index * spacing - 25;
             const centerY = startY + 10;
 
             // Ball gradient
@@ -471,7 +491,7 @@ const LotteryGame: React.FC = () => {
 
         setCredits(credits - 25);
         setIsAnimating(true);
-        setMessage(`Ticket purchased! Win the ${prize.value}!`);
+        setMessage(getEncouragingMessage());
 
         setTimeout(() => {
             setIsAnimating(false);
@@ -508,7 +528,7 @@ const LotteryGame: React.FC = () => {
         <div className="lottery-game">
             <div className="credits-container-main">
                 <div className="credits-section">
-                    <div className="credits-label">Bal KES: </div>
+                    <div className="credits-label">Bal KES:</div>
                     <div className="credits-amount">{credits}</div>
                 </div>
 
@@ -572,29 +592,30 @@ const LotteryGame: React.FC = () => {
                 </div>
             </div>
 
-            {/* Message Display */}
-            {message && (
-                <div className="message-display">
-                    {message}
-                </div>
-            )}
-
             {/* Action Buttons */}
             <div className="action-buttons">
-                <button
-                    className="buy-ticket-btn"
-                    onClick={handleBuyTicket}
-                    disabled={selectedNumbers.length !== 10}
+                <div
+                    className={`buy-ticket-btn ${selectedNumbers.length !== 10 ? 'disabled' : ''}`}
+                    onClick={selectedNumbers.length === 10 ? handleBuyTicket : undefined}
                 >
                     BUY TICKET 30.00
-                </button>
-                <button
+                </div>
+                <div
                     className="reset-btn"
                     onClick={handleReset}
                 >
                     RESET
-                </button>
+                </div>
             </div>
+
+            {/* Message Display */}
+            {message && (
+                <div className="message-overlay-toast">
+                    <div className="message-display">
+                        {message}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
