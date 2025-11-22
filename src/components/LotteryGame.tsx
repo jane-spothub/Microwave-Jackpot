@@ -153,18 +153,21 @@ const LotteryGame: React.FC = () => {
             );
 
             if (number.selected) {
-                gradient.addColorStop(0, '#ff6b6b');
-                gradient.addColorStop(0.7, '#ff4757');
-                gradient.addColorStop(1, '#e84118');
+                   // Deep gold
+                gradient.addColorStop(0, '#ffed4e');   // Lighter gold on hover
+                gradient.addColorStop(0.7, '#ffd700'); // Your theme gold
+                gradient.addColorStop(1, '#ff8c00');
             } else if (isHovered && isSelectable) {
-                // Hover effect - brighter colors
-                gradient.addColorStop(0, '#7c8aff');
-                gradient.addColorStop(0.7, '#8a7cff');
-                gradient.addColorStop(1, '#6a5acd');
+                gradient.addColorStop(0, '#ffd700');  // Bright gold
+                gradient.addColorStop(0.7, '#ffb347'); // Warm gold
+                gradient.addColorStop(1, '#ff8c00');
             } else {
-                gradient.addColorStop(0, '#667eea');
-                gradient.addColorStop(0.7, '#764ba2');
-                gradient.addColorStop(1, '#5a3d8a');
+                /* Luxury color combination */
+                /* Luxury color combination */
+                /* Creates beautiful contrast with gold */
+                gradient.addColorStop(0, '#00ffff');   /* Electric cyan */
+                gradient.addColorStop(0.7, '#0099ff'); /* Bright blue */
+                gradient.addColorStop(1, '#0066ff');   /* Deep blue */
             }
 
             // Enhanced shadow for hover effect
@@ -174,7 +177,7 @@ const LotteryGame: React.FC = () => {
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 0;
             } else {
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+                ctx.shadowColor = 'rgba(0,0,0,0.26)';
                 ctx.shadowBlur = 25;
                 ctx.shadowOffsetX = 8;
                 ctx.shadowOffsetY = 8;
@@ -201,15 +204,15 @@ const LotteryGame: React.FC = () => {
 
             // Number styling with hover effect
             ctx.shadowColor = 'transparent';
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'black';
             ctx.font = `bold ${isHovered ? '52px' : '48px'} Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
             // Add text shadow for better readability
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowBlur = 6;
-            ctx.shadowOffsetX = 3;
+            ctx.shadowColor = 'rgb(255,255,255)';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetX = 4;
             ctx.shadowOffsetY = 3;
             ctx.fillText(number.value.toString(), centerX, centerY);
             ctx.shadowColor = 'transparent';
@@ -270,7 +273,7 @@ const LotteryGame: React.FC = () => {
         const spacing = 90;
 
         // Draw selection area background
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.fillStyle = 'rgba(52,111,255,0.19)';
         ctx.roundRect(50, startY - 100, 900, 220, 30);
         ctx.fill();
 
@@ -298,9 +301,9 @@ const LotteryGame: React.FC = () => {
                 centerX - 15, centerY - 15, 8,
                 centerX, centerY, ballRadius
             );
-            gradient.addColorStop(0, '#ff6b6b');
-            gradient.addColorStop(0.7, '#ff4757');
-            gradient.addColorStop(1, '#e84118');
+            gradient.addColorStop(0, '#ffd700');  // Bright gold
+            gradient.addColorStop(0.7, '#ffb347'); // Warm gold
+            gradient.addColorStop(1, '#ff8c00');
 
             // Ball shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
@@ -329,7 +332,7 @@ const LotteryGame: React.FC = () => {
 
             // Number
             ctx.shadowColor = 'transparent';
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'black';
             ctx.font = 'bold 28px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';

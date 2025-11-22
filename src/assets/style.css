@@ -1,15 +1,15 @@
 /* LotteryGame.css */
+/* LotteryGame.css - Red & Gold Classic Theme */
 .lottery-game {
     max-width: 600px;
     margin: 0 auto;
-    /*padding: 20px;*/
-    background: linear-gradient(135deg, rgba(18, 37, 73, 0.4) 0%, rgb(89, 2, 119) 100%);
+    background: linear-gradient(135deg, rgb(40, 6, 105) 0%, #000000 50%, rgba(0, 41, 118, 0.44) 100%);
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0 20px 40px rgba(0, 41, 118, 0.44);*/
     font-family: 'Arial', sans-serif;
-    color: white;
+    color: #00c6ff;
     height: 100vh;
-    /*min-height: 600px;*/
+    /*border: 2px solid #ffd700;*/
 }
 
 .cred-title {
@@ -17,13 +17,14 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(0, 198, 255, 0.32);
     border-radius: 15px;
     padding: 5px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(0, 198, 255, 0.1), rgba(0, 21, 255, 0.1));
     backdrop-filter: blur(10px);
     margin-top: 5px;
 }
+
 
 /* Current Prize Section */
 .current-prize {
@@ -273,26 +274,73 @@ canvas {
 }
 
 /* Message Display */
+/* Message Toast Display */
 .message-overlay-toast {
-    z-index: 1;
-    position: absolute;
-    bottom: 10%;
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    pointer-events: none;
 }
 
 .message-display {
-    display: flex;
-    align-items: center;
-    background: rgb(103, 255, 0);
-    padding: 5px;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #67ff00, #4cd964);
+    padding: 12px 24px;
+    border-radius: 25px;
     text-align: center;
     backdrop-filter: blur(10px);
     color: #000000;
     font-weight: bold;
-    animation: pulse 2s infinite;
+    animation: slideUp 0.3s ease-out, pulse 2s infinite;
+    box-shadow: 0 4px 20px rgba(103, 255, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 16px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(103, 255, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(103, 255, 0, 0.6);
+    }
+}
+
+/* Optional: Add a progress bar for auto-dismiss */
+.message-display::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 25px 25px;
+    animation: progress 3s linear;
+}
+
+@keyframes progress {
+    from { width: 100%; }
+    to { width: 0%; }
 }
 
 @keyframes pulse {
@@ -357,9 +405,9 @@ canvas {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    background: linear-gradient(145deg, #cccccc, #999999);
-    color: #666666;
-    box-shadow: 0 5px 1px #666666;
+    background: linear-gradient(145deg, #fdd500, #fd6a00);
+    color: #000000;
+    box-shadow: 0 5px 1px #9f4200;
 }
 
 /* Optional: Add active state for buttons */
@@ -379,7 +427,7 @@ canvas {
 }
 
 .credits-section {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(154, 187, 255, 0.08);
     padding: 10px;
     border-radius: 15px;
     text-align: center;
