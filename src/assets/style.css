@@ -3,7 +3,7 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background: linear-gradient(135deg, #000931 0%, #764ba2 100%);
+    background: linear-gradient(135deg, rgba(18, 37, 73, 0.4) 0%, rgb(89, 2, 119) 100%);
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     font-family: 'Arial', sans-serif;
@@ -207,8 +207,9 @@
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     margin-bottom: 10px;
+
     -webkit-tap-highlight-color: transparent;
-    /*padding: 10px;*/
+    padding: 10px 0;
 }
 
 .main-canvas {
@@ -225,17 +226,17 @@
     outline: none;
 }
 
-.main-canvas:hover {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.06);
-}
+/*.main-canvas:hover {*/
+/*    box-shadow: 0 0 20px rgba(255, 215, 0, 0.06);*/
+/*}*/
 .main-canvas:focus {
     outline: none;
 }
 
 canvas{
-    max-height: 500px;
+    max-height: 450px;
     width: 100%;
-    max-width: 700px;
+    max-width: 550px;
 }
 
 /* Quick Select Buttons */

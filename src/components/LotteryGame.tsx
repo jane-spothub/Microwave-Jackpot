@@ -22,6 +22,7 @@ const LotteryGame: React.FC = () => {
     const [timeLeft, setTimeLeft] = useState<string>('');
     const [message, setMessage] = useState<string>('');
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const [hoveredBall, setHoveredBall] = useState<number | null>(null);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number>(0);
@@ -34,17 +35,17 @@ const LotteryGame: React.FC = () => {
         image: microwave
     };
 
-    // Calculate next draw time (twice daily)
+    // Calculate next draw time (always at 17:00 PM)
     function getNextDrawTime(): Date {
         const now = new Date();
         const nextDraw = new Date();
 
-        // Set to next 5:00 PM or 5:00 AM
-        if (now.getHours() < 17) {
-            nextDraw.setHours(17, 0, 0, 0);
-        } else {
+        // Always set to 17:00 (5 PM)
+        nextDraw.setHours(17, 0, 0, 0);
+
+        // If current time is after 17:00 today, set to 17:00 tomorrow
+        if (now.getHours() >= 17) {
             nextDraw.setDate(nextDraw.getDate() + 1);
-            nextDraw.setHours(5, 0, 0, 0);
         }
 
         return nextDraw;
@@ -106,14 +107,14 @@ const LotteryGame: React.FC = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [numbers, selectedNumbers, isAnimating]);
+    }, [numbers, selectedNumbers, isAnimating, hoveredBall]);
 
     const drawNumberGrid = (ctx: CanvasRenderingContext2D) => {
-        const ballRadius = 80; // Larger radius for 1000x1000 canvas
-        const horizontalSpacing = 180; // More space between columns
-        const verticalSpacing = 180; // More space between rows
-        const startX = 140; // Start position X
-        const startY = 100; // Start position Y
+        const ballRadius = 80;
+        const horizontalSpacing = 180;
+        const verticalSpacing = 180;
+        const startX = 140;
+        const startY = 100;
 
         // Draw 20 numbers in 4x5 grid with more spacing
         numbers.forEach((number, index) => {
@@ -122,7 +123,10 @@ const LotteryGame: React.FC = () => {
             const centerX = startX + col * horizontalSpacing;
             const centerY = startY + row * verticalSpacing;
 
-            // Ball gradient based on selection
+            const isHovered = hoveredBall === index;
+            const isSelectable = !(selectedNumbers.length >= 10 && !number.selected);
+
+            // Ball gradient based on selection and hover state
             const gradient = ctx.createRadialGradient(
                 centerX - 30, centerY - 30, 15,
                 centerX, centerY, ballRadius
@@ -132,17 +136,29 @@ const LotteryGame: React.FC = () => {
                 gradient.addColorStop(0, '#ff6b6b');
                 gradient.addColorStop(0.7, '#ff4757');
                 gradient.addColorStop(1, '#e84118');
+            } else if (isHovered && isSelectable) {
+                // Hover effect - brighter colors
+                gradient.addColorStop(0, '#7c8aff');
+                gradient.addColorStop(0.7, '#8a7cff');
+                gradient.addColorStop(1, '#6a5acd');
             } else {
                 gradient.addColorStop(0, '#667eea');
                 gradient.addColorStop(0.7, '#764ba2');
                 gradient.addColorStop(1, '#5a3d8a');
             }
 
-            // Ball shadow
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-            ctx.shadowBlur = 25;
-            ctx.shadowOffsetX = 8;
-            ctx.shadowOffsetY = 8;
+            // Enhanced shadow for hover effect
+            if (isHovered && isSelectable) {
+                ctx.shadowColor = 'rgba(124, 138, 255, 0.6)';
+                ctx.shadowBlur = 35;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+            } else {
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+                ctx.shadowBlur = 25;
+                ctx.shadowOffsetX = 8;
+                ctx.shadowOffsetY = 8;
+            }
 
             // Draw ball
             ctx.beginPath();
@@ -150,23 +166,23 @@ const LotteryGame: React.FC = () => {
             ctx.fillStyle = gradient;
             ctx.fill();
 
-            // Highlight effect
+            // Highlight effect - enhanced on hover
             const highlightGradient = ctx.createRadialGradient(
                 centerX - 25, centerY - 25, 0,
-                centerX - 25, centerY - 25, 35
+                centerX - 25, centerY - 25, isHovered ? 45 : 35
             );
-            highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+            highlightGradient.addColorStop(0, isHovered ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.4)');
             highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
             ctx.beginPath();
-            ctx.arc(centerX - 25, centerY - 25, 35, 0, Math.PI * 2);
+            ctx.arc(centerX - 25, centerY - 25, isHovered ? 45 : 35, 0, Math.PI * 2);
             ctx.fillStyle = highlightGradient;
             ctx.fill();
 
-            // Number styling
+            // Number styling with hover effect
             ctx.shadowColor = 'transparent';
             ctx.fillStyle = 'white';
-            ctx.font = 'bold 48px Arial';
+            ctx.font = `bold ${isHovered ? '52px' : '48px'} Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
@@ -177,6 +193,27 @@ const LotteryGame: React.FC = () => {
             ctx.shadowOffsetY = 3;
             ctx.fillText(number.value.toString(), centerX, centerY);
             ctx.shadowColor = 'transparent';
+
+            // Hover glow effect
+            if (isHovered && isSelectable) {
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 6;
+                ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, ballRadius + 8, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.shadowColor = 'transparent';
+            }
+
+            // Selected state border
+            if (number.selected) {
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, ballRadius + 4, 0, Math.PI * 2);
+                ctx.stroke();
+            }
 
             // Disabled state overlay
             if (selectedNumbers.length >= 10 && !number.selected) {
@@ -196,23 +233,25 @@ const LotteryGame: React.FC = () => {
                 ctx.stroke();
             }
 
-            // Hover effect border (always show for better visual)
-            ctx.strokeStyle = number.selected ? '#ffd700' : 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, ballRadius + 2, 0, Math.PI * 2);
-            ctx.stroke();
+            // Regular border for non-hovered balls
+            if (!isHovered && !number.selected) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, ballRadius + 2, 0, Math.PI * 2);
+                ctx.stroke();
+            }
         });
     };
 
     const drawSelectedNumbers = (ctx: CanvasRenderingContext2D, animate: boolean = false) => {
-        const startY = 850; // Position near bottom for 1000px height
+        const startY = 850;
         const ballRadius = 40;
-        const spacing = 90; // More space between selected balls
+        const spacing = 90;
 
         // Draw selection area background
         ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-        ctx.roundRect(50, startY -100, 900, 220, 30);
+        ctx.roundRect(50, startY - 100, 900, 220, 30);
         ctx.fill();
 
         // Draw "Selected Numbers" title
@@ -228,10 +267,10 @@ const LotteryGame: React.FC = () => {
 
         // Draw selected balls in a row with equal spacing
         const totalWidth = selectedNumbers.length * spacing;
-        const startX = (1000 - totalWidth) / 2 + spacing / 2; // Center the row
+        const startX = (1000 - totalWidth) / 2 + spacing / 2+25;
 
         selectedNumbers.forEach((num, index) => {
-            const centerX = startX + index * spacing;
+            const centerX = startX + index * spacing-25;
             const centerY = startY + 10;
 
             // Ball gradient
@@ -311,6 +350,54 @@ const LotteryGame: React.FC = () => {
         }
     }, []);
 
+    const handleCanvasMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (event.clientX - rect.left) * scaleX;
+        const y = (event.clientY - rect.top) * scaleY;
+
+        const ballRadius = 80;
+        const horizontalSpacing = 180;
+        const verticalSpacing = 180;
+        const startX = 140;
+        const startY = 100;
+
+        let foundHover = false;
+
+        // Check if mouse is over any ball
+        numbers.forEach((number, index) => {
+            const row = Math.floor(index / 5);
+            const col = index % 5;
+            const centerX = startX + col * horizontalSpacing;
+            const centerY = startY + row * verticalSpacing;
+
+            const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+
+            if (distance <= ballRadius) {
+                setHoveredBall(index);
+                foundHover = true;
+                canvas.style.cursor = (selectedNumbers.length >= 10 && !number.selected) ? 'not-allowed' : 'pointer';
+            }
+        });
+
+        if (!foundHover) {
+            setHoveredBall(null);
+            canvas.style.cursor = 'default';
+        }
+    };
+
+    const handleCanvasMouseLeave = () => {
+        setHoveredBall(null);
+        const canvas = canvasRef.current;
+        if (canvas) {
+            canvas.style.cursor = 'default';
+        }
+    };
+
     const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -326,7 +413,7 @@ const LotteryGame: React.FC = () => {
             const ballRadius = 80;
             const horizontalSpacing = 180;
             const verticalSpacing = 180;
-            const startX = 100;
+            const startX = 140;
             const startY = 100;
 
             // Check each ball's area
@@ -461,6 +548,8 @@ const LotteryGame: React.FC = () => {
                         height={1000}
                         className="main-canvas"
                         onClick={handleCanvasClick}
+                        onMouseMove={handleCanvasMouseMove}
+                        onMouseLeave={handleCanvasMouseLeave}
                     />
                 </div>
 
